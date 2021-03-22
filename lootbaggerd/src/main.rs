@@ -1,3 +1,13 @@
+use core::core;
+
+use log::{info};
+use simple_logger::SimpleLogger;
+
+
 fn main() {
-    println!("Hello, world!");
+    SimpleLogger::new().init().unwrap();
+
+    info!("Hello, world!");
+
+    core();
 }
