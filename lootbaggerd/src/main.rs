@@ -3,7 +3,7 @@ extern crate daemonize;
 use log::{info, trace, warn, error};
 use clap::{App, Arg};
 
-
+use serde_json::json;
 use std::fs::File;
 
 use daemonize::Daemonize;
@@ -17,7 +17,7 @@ use std::error::Error;
 use futures::prelude::*;
 use serde_json::Value;
 use tokio_serde::formats::*;
-use tokio_util::codec::{FramedRead, LengthDelimitedCodec};
+use tokio_util::codec::{FramedRead, LengthDelimitedCodec, Framed};
 
 fn start_server() ->  Result<(), Box<dyn Error>> {
     info!("Success, daemonized");
@@ -28,7 +28,7 @@ fn start_server() ->  Result<(), Box<dyn Error>> {
 
         loop {
             let (socket, _) = listener.accept().await.unwrap();
-            let length_delimited = FramedRead::new(socket, LengthDelimitedCodec::new());
+            let length_delimited = Framed::new(socket, LengthDelimitedCodec::new());
 
             let mut deserialized = tokio_serde::SymmetricallyFramed::new(
                 length_delimited,
@@ -37,8 +37,18 @@ fn start_server() ->  Result<(), Box<dyn Error>> {
 
             tokio::spawn(async move {
                 while let Some(msg) = deserialized.try_next().await.unwrap() {
-                    info!("GOT: {:?}", msg);
+                    info!("GOT: {:?} => {}", msg, msg["action"]);
                 }
+
+                let response = json!(
+                        {
+                            "action": "test"
+                        }
+                );
+
+                info!("Response message {} -> {}", response.to_string(), response.to_string().len());
+                deserialized.send(response).await.unwrap();
+                info!("Next Ply");
             });
         }
     })
