@@ -1,2 +1,2 @@
 [workspace]
-members = ["core", "lootbaggerd", "lootwatcher", 'lootcli']
+members = ["core", "lootwatcher", 'lootcli']
