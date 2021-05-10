@@ -2,10 +2,10 @@
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
-/// # Project definition file
+/// # Workspace definition file
 ///
 /// Contains
-pub struct Project {
+pub struct Workspace {
     /// Company or CTF name
     #[serde(default = "default_name")]
     pub name: String,
@@ -59,46 +59,46 @@ mod tests {
     use crate::*;
 
     #[test]
-    fn deserialize_default_project() {
-        let project: Project = toml::from_str(r#"
+    fn deserialize_default_workspace() {
+        let ws: Workspace = toml::from_str(r#"
             "#).unwrap();
-            assert_eq!(project.name, "CorpName");
-            assert_eq!(project.url, "https://www.example.com");
-            assert_eq!(project.settings.preferred_folder_convention, FolderConvention::IP);
-            assert_eq!(project.settings.update_time, 100);
+            assert_eq!(ws.name, "CorpName");
+            assert_eq!(ws.url, "https://www.example.com");
+            assert_eq!(ws.settings.preferred_folder_convention, FolderConvention::IP);
+            assert_eq!(ws.settings.update_time, 100);
     }
 
     #[test]
-    fn deserialize_project() {
-        let project: Project = toml::from_str(r#"
+    fn deserialize_workspace() {
+        let ws: Workspace = toml::from_str(r#"
             name = "Test"
             url = "https://www.example2.com"
             "#).unwrap();
-        assert_eq!(project.name, "Test");
-        assert_eq!(project.url, "https://www.example2.com");
-        assert_eq!(project.settings.update_time, 100);
+        assert_eq!(ws.name, "Test");
+        assert_eq!(ws.url, "https://www.example2.com");
+        assert_eq!(ws.settings.update_time, 100);
     }
 
     #[test]
-    fn deserialize_with_unknown_project() {
-        let project: Project = toml::from_str(r#"
+    fn deserialize_with_unknown_workspace() {
+        let ws: Workspace = toml::from_str(r#"
             name = "Test"
             url = "https://www.example2.com"
             NotKnown = "Just a humble try"
             "#).unwrap();
-        assert_eq!(project.name, "Test");
-        assert_eq!(project.url, "https://www.example2.com");
-        assert_eq!(project.settings.update_time, 100);
+        assert_eq!(ws.name, "Test");
+        assert_eq!(ws.url, "https://www.example2.com");
+        assert_eq!(ws.settings.update_time, 100);
     }
 
     #[test]
-    fn serialize_project() {
-        // let project = Project {
+    fn serialize_workspace() {
+        // let ws = Workspace {
         //     name: "Test".to_string(),
         //     url: "".to_string(),
         //     settings: Settings {}
         // };
-        // let toml = toml::to_string(&project).unwrap();
+        // let toml = toml::to_string(&ws).unwrap();
         // assert_eq!(toml, r#"name = "Test"
         //     "#);
     }
