@@ -5,7 +5,7 @@ use log::*;
 
 use crate::workspace::fields::{Workspace, Settings, FolderConvention};
 use std::fs::File;
-use std::io::{Write, Error, ErrorKind};
+use std::io::{Write, Read, Error, ErrorKind};
 
 const WORKSPACE_FILE: &str = "workspace.yaml";
 
@@ -35,13 +35,12 @@ impl Workspace {
         Ok(())
     }
 
-    pub fn load(filename: &Path) {
+    pub fn load(filename: &Path) -> std::io::Result<Workspace> {
         debug!("Load {}", filename.to_str().unwrap());
+        let mut file = File::open(filename)?;
+        let mut contents = String::new();
+        file.read_to_string(&mut contents)?;
+        let ws: Workspace = toml::from_str(contents.as_str())?;
+        return Ok(ws)
     }
-
-    pub fn unload() {
-        debug!("UnLoad");
-    }
-
-
 }
