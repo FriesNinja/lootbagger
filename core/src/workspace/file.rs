@@ -34,6 +34,9 @@ impl Workspace {
         };
         let toml = toml::to_string(&ws).unwrap();
         fd.write_all(toml.as_bytes())?;
+
+        super::metadata::metadata::Metadata::create()?;
+
         Ok(())
     }
 
@@ -43,7 +46,6 @@ impl Workspace {
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
         let ws: Workspace = toml::from_str(contents.as_str())?;
-        super::metadata::metadata::Metadata::create();
         return Ok(ws)
     }
 }

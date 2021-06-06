@@ -22,9 +22,9 @@ stoploot () {
 
 stoploot nondestructive
 
-LOOT_ENV="/work/security/lootbagger/target/debug/test/.metaloot/"
+LOOT_ENV="{{ROOT_DIR}}/.metaloot/"
 export LOOT_ENV
-LOOT_ROOT="/work/security/lootbagger/target/debug/test/"
+LOOT_ROOT="{{ROOT_DIR}}"
 export LOOT_ROOT
 
 _OLD_VIRTUAL_PATH="$PATH"
