@@ -4,6 +4,8 @@ use std::path::Path;
 use log::*;
 
 use crate::workspace::fields::{Workspace, Settings, FolderConvention};
+use crate::workspace::metadata::metadata;
+
 use std::fs::File;
 use std::io::{Write, Read, Error, ErrorKind};
 
@@ -41,6 +43,7 @@ impl Workspace {
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
         let ws: Workspace = toml::from_str(contents.as_str())?;
+        super::metadata::metadata::Metadata::create();
         return Ok(ws)
     }
 }
